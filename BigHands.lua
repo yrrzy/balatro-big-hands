@@ -5,7 +5,7 @@
 --- MOD_DESCRIPTION: Adds a voucher that allows playing up to 6 cards, introduces 4 new Planet cards for the hands this creates, and one new Joker.
 --- BADGE_COLOUR: ffc90e
 --- PREFIX: bighands
---- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
+--- DEPENDENCIES: [Steamodded>=1.0.0~BETA-1814a]
 
 ----------------------------------------------
 ------------ATLAS ----------------------------
@@ -28,14 +28,15 @@ SMODS.Voucher {
 	pos = { x = 4, y = 0 },
 	redeem = function(self, card)
         		--Change highlight limit
-        		G.hand.config.highlighted_limit = 6
+			SMODS.change_play_limit(1)
+			SMODS.change_discard_limit(1)
         		G.GAME.pool_flags.bighandsreal = true
 
         		-- Make new hands visible
-        		--G.GAME.hands.bighands_three_pair.visible = true
-        		--G.GAME.hands.bighands_flush_triad.visible = true
-        		--G.GAME.hands.bighands_flush_six.visible = true
-        		--G.GAME.hands.bighands_6oak.visible = true
+        		G.GAME.hands.bighands_three_pair.visible = true
+        		G.GAME.hands.bighands_flush_triad.visible = true
+        		G.GAME.hands.bighands_flush_six.visible = true
+        		G.GAME.hands.bighands_6oak.visible = true
 	end
 }
 
@@ -442,39 +443,6 @@ SMODS.Joker {
 	atlas = 'bighandsatlas',
 	pos = {
 		x = 6,
-		y = 0
-	},
-	cost = 2,
-	calculate = function(self, card, context)
-		if context.joker_main then
-			local score = #context.full_hand - #context.scoring_hand
-			if score>1 then
-				return {
-					xmult=score
-				}
-			end
-		end
-	end
-}
-
-SMODS.Joker {
-	key = 'moneyjoker',
-	loc_txt = {
-		name = 'Money Joker',
-		text = {
-			"This Joker gives {C:white,X:mult} X#1# {} Mult",
-			"for each {C:attention}non-scoring{} card",
-			"in {C:attention}played hand"
-		}
-	},
-	config = { extra = { mult = 1 } },
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.mult } }
-	end,
-	rarity = 1,
-	atlas = 'bighandsatlas',
-	pos = {
-		x = 7,
 		y = 0
 	},
 	cost = 2,
